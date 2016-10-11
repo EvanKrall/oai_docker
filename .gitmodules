@@ -1,0 +1,6 @@
+[submodule "enb_rrh/openairinterface5g"]
+	path = enb_rrh/openairinterface5g
+	url = https://gitlab.eurecom.fr/oai/openairinterface5g.git
+[submodule "epc/openair-cn"]
+	path = epc/openair-cn
+	url = https://gitlab.eurecom.fr/oai/openair-cn.git
