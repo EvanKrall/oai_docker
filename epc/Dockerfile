@@ -57,3 +57,13 @@ RUN ./build_mme -i --force
 RUN ./build_hss -i --force
 RUN ./build_spgw -i --force
 
+
+RUN ./check_hss_s6a_certificate /usr/local/etc/oai/freeDiameter/ hss.openair4G.eur
+RUN ./check_mme_s6a_certificate /usr/local/etc/oai/freeDiameter/ mme.openair4G.eur
+RUN ./build_hss -c
+RUN ./build_mme -c
+RUN ./build_spgw -c
+
+ADD ./conf /usr/local/etc/oai
+
+

@@ -9,11 +9,23 @@ services:
     privileged: true
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
-  epc:
+  hss:
     build: epc
+    command: bash -x -c "/usr/bin/mysqld_safe & sleep 3 && mysql -e \"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('linux');\" && bash -x ./run_hss -i /usr/local/etc/oai/oai_db.sql"
     networks:
       default:
-        ipv4_address: 192.168.12.11
+        ipv4_address: 192.168.12.12
+    domainname: openair4g.eur
+    hostname: hss
+  mme:
+    build: epc
+    command: ./run_mme
+    links:
+     - hss:hss.openair4g.eur
+    networks:
+      default:
+        ipv4_address: 192.168.12.13
+    hostname: mme
 
 networks:
   default:
