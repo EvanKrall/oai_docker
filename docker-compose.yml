@@ -6,7 +6,7 @@ services:
     networks:
       default:
         ipv4_address: 192.168.12.215
-    privileged: true
+    privileged: true # enb needs to be able to access USB devices.
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
   hss:
@@ -24,8 +24,22 @@ services:
      - hss:hss.openair4g.eur
     networks:
       default:
-        ipv4_address: 192.168.12.13
+        ipv4_address: 192.168.12.11
     hostname: mme
+  spgw:
+    build: epc
+    command: ./run_spgw
+    links:
+     - hss:hss.openair4g.eur
+    privileged: true # spgw needs to be able to modprobe gtp, change iptables, and add network interfaces.
+    networks:
+      default:
+        ipv4_address: 192.168.12.14
+      public:
+        ipv4_address: 192.168.11.17
+    hostname: spgw
+    volumes:
+     - /lib/modules:/lib/modules # so that we can modprobe gtp.
 
 networks:
   default:
@@ -35,4 +49,10 @@ networks:
       config:
       - subnet: 192.168.12.0/24
         gateway: 192.168.12.1
-
+  public:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.11.0/24
+        gateway: 192.168.11.1
