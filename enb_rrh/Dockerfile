@@ -11,4 +11,4 @@ RUN . ./oaienv && cd cmake_targets && ./build_oai -w BLADERF -x -c --eNB
 
 ADD enb.band7.tm1.bladerfx40.conf ./
 
-CMD . ./oaienv && cd cmake_targets/lte_build_oai/build && ./lte-softmodem -O $OPENAIR_DIR/targets/PROJECTS/GENERIC-LTE-EPC/CONF/enb.band7.tm1.bladerfx40.conf
+CMD . ./oaienv && cd cmake_targets/lte_build_oai/build && ./lte-softmodem -O /openairinterface5g/enb.band7.tm1.bladerfx40.conf
