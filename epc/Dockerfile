@@ -65,6 +65,5 @@ RUN ./build_mme -c
 RUN ./build_spgw -c
 
 RUN apt-get install -yq iptables 
-RUN apt-get install -yq --no-install-recommends linux-image-$(uname -r) linux-headers-$(uname -r) #
 ADD ./conf /usr/local/etc/oai
 

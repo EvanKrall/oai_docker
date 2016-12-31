@@ -35,8 +35,8 @@ services:
     networks:
       default:
         ipv4_address: 192.168.12.14
-      public:
-        ipv4_address: 192.168.11.17
+      pdn:
+        ipv4_address: 172.16.0.2
     hostname: spgw
     volumes:
      - /lib/modules:/lib/modules # so that we can modprobe gtp.
@@ -49,10 +49,10 @@ networks:
       config:
       - subnet: 192.168.12.0/24
         gateway: 192.168.12.1
-  public:
+  pdn:
     driver: bridge
     ipam:
       driver: default
       config:
-      - subnet: 192.168.11.0/24
-        gateway: 192.168.11.1
+      - subnet: 172.16.0.0/16
+        gateway: 172.16.0.1
