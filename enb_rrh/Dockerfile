@@ -6,9 +6,16 @@ ADD ./openairinterface5g /openairinterface5g
 WORKDIR /openairinterface5g
 RUN git checkout develop
 ENV GIT_SSL_NO_VERIFY true
-RUN . ./oaienv && cd cmake_targets && ./build_oai -w BLADERF -I --disable-hardware-dependency
-RUN . ./oaienv && cd cmake_targets && ./build_oai -w BLADERF -x -c --eNB
+ARG radio
+RUN if [ $radio = LMSSDR ]; then \
+    echo 'deb http://ppa.launchpad.net/myriadrf/drivers/ubuntu trusty main' > /etc/apt/sources.list.d/myriadrf.list &&\
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-key 22C627172ECB91FE &&\
+    apt-get update &&\
+    apt-get install -yq limesuite limesuite-udev soapysdr soapysdr-module-lms7 liblimesuite-dev;\
+  fi # bump1
+RUN . ./oaienv && cd cmake_targets && ./build_oai -w $radio -I --disable-hardware-dependency
+RUN . ./oaienv && cd cmake_targets && ./build_oai -w $radio -x -c --eNB
 
-ADD enb.band7.tm1.bladerfx40.conf ./
+ADD enb.band7.tm1.lmssdr.conf ./
 
-CMD . ./oaienv && cd cmake_targets/lte_build_oai/build && ./lte-softmodem -O /openairinterface5g/enb.band7.tm1.bladerfx40.conf
+CMD . ./oaienv && cd cmake_targets/lte_build_oai/build && ./lte-softmodem -O /openairinterface5g/enb.band7.tm1.lmssdr.conf --rf-config-file $OPENAIR_DIR/targets/ARCH/LMSSDR/LimeSDR.ini
