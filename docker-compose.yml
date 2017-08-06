@@ -6,24 +6,57 @@ services:
       context: enb_rrh
       args:
         radio: LMSSDR
+        target: eNB
     networks:
       default:
         ipv4_address: 192.168.12.215
     privileged: true # enb needs to be able to access USB devices.
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
+    command: ./lte-softmodem -O /root/enb.band40.tm1.lmssdr.conf --rf-config-file /root/LimeSDR.ini
+    volumes:
+      - ./enb_rrh/enb.band40.tm1.lmssdr.conf:/root/enb.band40.tm1.lmssdr.conf
+      - ./enb_rrh/LimeSDR.ini:/root/LimeSDR.ini
   enb_bladerf:
     <<: *ENB_TEMPLATE
     build:
       context: enb_rrh
       args:
         radio: BLADERF
+        target: eNB
   enb_usrp:
     <<: *ENB_TEMPLATE
     build:
       context: enb_rrh
       args:
         radio: USRP
+        target: eNB
+  ue_limesdr: &UE_TEMPLATE
+    build:
+      context: enb_rrh
+      dockerfile: Dockerfile.xenial
+      args:
+        radio: LMSSDR
+        target: UE
+    privileged: true # ue needs to be able to access USB devices.
+    devices:
+      - "/dev/bus/usb/002/003"
+  ue_bladerf:
+    <<: *UE_TEMPLATE
+    build:
+      context: enb_rrh
+      dockerfile: Dockerfile.xenial
+      args:
+        radio: BLADERF
+        target: UE
+  ue_usrp:
+    <<: *UE_TEMPLATE
+    build:
+      context: enb_rrh
+      dockerfile: Dockerfile.xenial
+      args:
+        radio: USRP
+        target: UE
   hss:
     build: epc
     command: bash -x -c "/usr/bin/mysqld_safe & sleep 3 && mysql -e \"SET PASSWORD FOR 'root'@'localhost' = PASSWORD('linux');\" && bash -x ./run_hss -i /usr/local/etc/oai/oai_db.sql"
@@ -55,6 +88,16 @@ services:
     hostname: spgw
     volumes:
      - /lib/modules:/lib/modules # so that we can modprobe gtp.
+  scanner:
+    build: scanner
+    privileged: true # scanner needs to be able to access USB devices.
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
+  sim_programmer:
+    build: sim_programmer
+    privileged: true # sim_programmer needs to be able to access USB devices.
+    devices:
+      - "/dev/bus/usb:/dev/bus/usb"
 
 networks:
   default:

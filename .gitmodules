@@ -4,3 +4,6 @@
 [submodule "epc/openair-cn"]
 	path = epc/openair-cn
 	url = https://gitlab.eurecom.fr/oai/openair-cn.git
+[submodule "scanner/LTE-Cell-Scanner"]
+	path = scanner/LTE-Cell-Scanner
+	url = https://github.com/JiaoXianjun/LTE-Cell-Scanner
