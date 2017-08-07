@@ -51,7 +51,7 @@ RUN apt-get update && apt-get install -yq \
     vlan \ 
     wget 
 ADD ./openair-cn /openair-cn
-WORKDIR /openair-cn/SCRIPTS
+WORKDIR /openair-cn/scripts
 RUN git checkout develop
 RUN ./build_mme -i --force
 RUN ./build_hss -i --force
