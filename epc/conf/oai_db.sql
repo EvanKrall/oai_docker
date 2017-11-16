@@ -62,7 +62,7 @@ CREATE TABLE `mmeidentity` (
 
 LOCK TABLES `mmeidentity` WRITE;
 /*!40000 ALTER TABLE `mmeidentity` DISABLE KEYS */;
-INSERT INTO `mmeidentity` VALUES (2,'mme.openair4G.eur','openair4G.eur',0);
+INSERT INTO `mmeidentity` VALUES (1,'mme.openair4G.eur','openair4G.eur',0);
 /*!40000 ALTER TABLE `mmeidentity` ENABLE KEYS */;
 UNLOCK TABLES;
 

@@ -32,7 +32,6 @@ RUN apt-get install -yq \
   libffi-dev \
   libforms-bin \
   libforms-dev \
-  libgcrypt11-dev \
   libgmp-dev \
   libgtk-3-dev \
   libidn2-0-dev \
@@ -40,7 +39,6 @@ RUN apt-get install -yq \
   libmysqlclient-dev \
   liboctave-dev \
   libpgm-dev \
-  libpython2.7-dev \
   libsctp1 \
   libsctp-dev \
   libssl-dev \
@@ -48,12 +46,9 @@ RUN apt-get install -yq \
   libusb-1.0-0-dev \
   libxml2 \
   libxml2-dev \
-  libxslt1-dev \
   mscgen \
   octave \
   octave-signal \
-  openssh-client \
-  openssh-server \
   openssl \
   python \
   subversion \
@@ -72,18 +67,18 @@ ADD ./openairinterface5g /openairinterface5g
 WORKDIR /openairinterface5g
 RUN . ./oaienv && cd cmake_targets && ./build_oai -w $radio -I --disable-hardware-dependency ; retval=$?; cat /openairinterface5g/cmake_targets/log/* || true; exit $retval
 ARG target
-RUN if [ $target = UE ]; then \
-    echo 'deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main' > /etc/apt/sources.list.d/ubuntu-toolchain-r-test.list &&\
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-key 1E9377A2BA9EF27F &&\
-    apt-get update &&\
-    apt-get install -yq gcc-4.9 g++-4.9 &&\
-    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 1 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9 ;\
-  fi
-RUN if [ $target = UE ]; then \
-    echo 'deb http://us.archive.ubuntu.com/ubuntu/ xenial-updates main' > /etc/apt/sources.list.d/xenial-updates.list &&\
-    apt-get update &&\
-    apt-get install -yq linux-headers-$(uname -r);\
-  fi
-RUN . ./oaienv && cd cmake_targets && ./build_oai -I -w $radio -x -c --$target ; retval=$?; cat /openairinterface5g/cmake_targets/log/* || true; exit $retval
+#RUN if [ $target = UE ]; then \
+#    echo 'deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu trusty main' > /etc/apt/sources.list.d/ubuntu-toolchain-r-test.list &&\
+#    apt-key adv --keyserver keyserver.ubuntu.com --recv-key 1E9377A2BA9EF27F &&\
+#    apt-get update &&\
+#    apt-get install -yq gcc-4.9 g++-4.9 &&\
+#    update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 1 --slave /usr/bin/g++ g++ /usr/bin/g++-4.9 ;\
+#  fi
+#RUN if [ $target = UE ]; then \
+#    echo 'deb http://us.archive.ubuntu.com/ubuntu/ xenial-updates main' > /etc/apt/sources.list.d/xenial-updates.list &&\
+#    apt-get update &&\
+#    apt-get install -yq linux-headers-$(uname -r);\
+#  fi
+RUN . ./oaienv && cd cmake_targets && ./build_oai -I -w $radio -c --$target --disable-hardware-dependency; retval=$?; cat /openairinterface5g/cmake_targets/log/* || true; exit $retval
 
 WORKDIR /openairinterface5g/cmake_targets/lte_build_oai/build

@@ -34,7 +34,6 @@ services:
   ue_limesdr: &UE_TEMPLATE
     build:
       context: enb_rrh
-      dockerfile: Dockerfile.xenial
       args:
         radio: LMSSDR
         target: UE
@@ -45,7 +44,6 @@ services:
     <<: *UE_TEMPLATE
     build:
       context: enb_rrh
-      dockerfile: Dockerfile.xenial
       args:
         radio: BLADERF
         target: UE
@@ -53,7 +51,6 @@ services:
     <<: *UE_TEMPLATE
     build:
       context: enb_rrh
-      dockerfile: Dockerfile.xenial
       args:
         radio: USRP
         target: UE
